@@ -125,15 +125,49 @@
                     }
                     case 0x4:
                     {
-
+                        short xReg = registers[inst & 0x0f00];
                         registers[inst & 0x0f00] += registers[inst&0x00F0];
+                        if(xReg < registers[inst & 0x0f00])
+                        {
+                            registers[0xf] = 1
+                        } else{
+                            registers[0xf] = 0;
+                        }
                         break;
                     }
                     case 0x5:
                     {
+                        short xReg = registers[inst & 0x0f00];
                         registers[inst & 0x0f00] -= registers[inst&0x00F0];
+                        if(xReg > registers[inst & 0x0f00])
+                        {
+                            registers[0xf] = 1
+                        } else{
+                            registers[0xf] = 0;
+                        }
                         break;
                     }
+                    case 0x6:
+                    {
+                        short xReg = registers[inst & 0x0f00];
+                        byte flag = (byte)((xReg & 0x1000) >> 15);
+                        registers[inst & 0x0f00] >>=1;
+                        registers[0xf] = flag;
+                        break;
+                    }
+                    case 0x7:
+                    {
+                        short xReg = registers[inst & 0x0f00];
+                        registers[inst & 0x0f00] = registers[inst&0x00F0] - registers[inst & 0x0f00];
+                        if(xReg > registers[inst & 0x0f00])
+                        {
+                            registers[0xf] = 1
+                        } else{
+                            registers[0xf] = 0;
+                        }
+                        break;
+                    }
+
                 }
                 break;
             }
